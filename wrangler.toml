@@ -1,0 +1,9 @@
+name = "chataifunction"
+main = "src/worker.js"
+compatibility_date = "2023-07-17"
+
+[vars]
+OPENAI_API_KEY = ""
+PINECONE_API_KEY = ""
+PINECONE_ENVIRONMENT = "asia-southeast1-gcp-free"
+PINECONE_INDEX = "demo"
