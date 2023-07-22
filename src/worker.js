@@ -39,9 +39,9 @@ export default {
 			if (question == null || question == "") {
 				return new Response('Invalid value', { status: 400 });
 			}
-			console.log("start**************time:"+new Date());
+			console.log("start**************time:" + new Date());
 			const result = await chatReply(env, question);
-			console.log("end****************time:"+new Date());
+			console.log("end****************time:" + new Date());
 			return new Response(JSON.stringify({ message: result }), {
 				headers: {
 					'Access-Control-Allow-Origin': '*',
@@ -94,6 +94,9 @@ async function chatReply(env, question) {
 		});
 	} catch (error) {
 		console.log(error);
+		if (error.message == "Request failed with status code 429") {
+			return "Sorry, you send too fast. Please send the message again."
+		}
 		return error;
 	}
 	try {
@@ -104,7 +107,7 @@ async function chatReply(env, question) {
 		let questionToPineconeResponse = result1['data']['choices'][0]['message']['function_call']['arguments'];
 		const questionToPineconeJson = JSON.parse(questionToPineconeResponse);
 		const questionToPinecone = questionToPineconeJson['question'];
-		console.log(questionToPinecone+"************time:"+new Date());
+		console.log(questionToPinecone + "************time:" + new Date());
 		let concatenatedPageContent = await queryData(env, questionToPinecone);
 		result2 = await openai.createChatCompletion({
 			model: "gpt-3.5-turbo-0613",
@@ -119,7 +122,7 @@ async function chatReply(env, question) {
 		console.log(error);
 		return error;
 	}
-	return "error:system error";
+
 }
 
 async function queryData(env, questionToPinecone) {
